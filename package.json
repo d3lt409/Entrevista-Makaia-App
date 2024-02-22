@@ -2,7 +2,7 @@
   "name": "entrevista-makaia-app",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://localhost:8080",
+  "proxy": "https://entrevista-makaia-api.onrender.com",
   "type": "module",
   "scripts": {
     "dev": "vite",
