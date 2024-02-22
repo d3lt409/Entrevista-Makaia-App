@@ -1,12 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { startLoginWithEmailPassword } from "../../store/userAuth/thunks";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -23,15 +25,8 @@ const Login = () => {
     const mentor = await dispatch(
       startLoginWithEmailPassword({ correo: email, password })
     );
-    if (mentor.status >= 400) {
-      Swal.fire({
-        title: "Datos incorrectos",
-        text: "No autorizado",
-        timer: 3000,
-        icon: "error",
-      });
-    } else {
-      console.log(mentor);
+    if (mentor.status < 400) {
+      navigate("/");
     }
   };
 

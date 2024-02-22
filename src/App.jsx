@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./pages/login/login";
 import { useCheckAuth } from "./hooks/useCheckAuth";
 import HeaderLaptop from "./components/header/headerLaptop";
 import Home from "./pages/home/home";
+import Form from "./components/Form/Form";
+import Login from "./pages/login/Login";
+import Entrevista from "./components/Entrevista/Entrevista";
+import Agenda from "./components/Agenda/Agenda";
 
 const App = () => {
   const { isAuthenticated, status } = useCheckAuth();
@@ -25,10 +28,13 @@ const App = () => {
       {isAuthenticated ? (
         <>
           <HeaderLaptop />
-          <main className="lg:mx-5 pt-4 sm:mx-1 container">
+          <main className="pt-8 p-2">
             <Routes>
               <>
                 <Route path="/" element={<Home />} />
+                <Route path="/form" element={<Form />} />
+                <Route path="/entrevista" element={<Entrevista />} />
+                <Route path="/agenda" element={<Agenda />} />
               </>
             </Routes>
           </main>
@@ -38,6 +44,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/aspirante:code"  element={<Login />} />
           </Routes>
         )
       )}

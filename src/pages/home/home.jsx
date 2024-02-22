@@ -1,3 +1,5 @@
+import Calendar from "../../components/Calendar/Calendar";
+
 const Home = () => {
   // const dispatch = useDispatch();
   // const handleLogout = () => {
@@ -5,7 +7,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>Home</h1>
+      <Calendar />
     </>
   );
 };

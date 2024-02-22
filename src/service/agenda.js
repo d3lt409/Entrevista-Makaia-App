@@ -1,8 +1,8 @@
 import { axiosMain } from ".";
 
-export const createEntrevistaService = async (entrevista) => {
+export const getAgendaByMentorId = async (mentorId) => {
   const response = await axiosMain
-    .post("entrevista", entrevista, {
+    .get("agenda/mentor/" + mentorId, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -15,23 +15,9 @@ export const createEntrevistaService = async (entrevista) => {
   return response.response;
 };
 
-export const updateEntrevistaService = async (entrevista) => {
+export const updateAgenda = async (agenda) => {
   const response = await axiosMain
-    .put("entrevista", entrevista, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    })
-    .then((response) => response)
-    .catch((err) => err);
-  if (response.status && response.status < 400) {
-    return response;
-  }
-  return response.response;
-};
-export const getEntrevistasMentorService = async (mentor_id) => {
-  const response = await axiosMain
-    .get("entrevista/mentor/" + mentor_id, {
+    .put("agenda", agenda, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -44,9 +30,9 @@ export const getEntrevistasMentorService = async (mentor_id) => {
   return response.response;
 };
 
-export const getEntrevistaById = async (entrevista_id) => {
+export const deleteAgenda = async (id) => {
   const response = await axiosMain
-    .get("entrevista/" + entrevista_id, {
+    .delete("agenda/" + id, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },

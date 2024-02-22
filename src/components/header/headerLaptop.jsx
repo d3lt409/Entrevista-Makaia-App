@@ -1,22 +1,44 @@
 // import { useState, useRef, useEffect } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { startLogout } from "../../store/userAuth/thunks";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../store/userAuth/userAuthSlice";
+import { useEffect, useState } from "react";
+import { selectEntrevista } from "../../store/Entrevista/EntrevistaAppSlice";
 // import { selectUser } from "../../store/userAuth/userAuthSlice";
 
 const HeaderLaptop = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const inputRef = useRef();
   // const navigate = useNavigate();
   // const [inputSearch, setInputSearch] = useState();
 
   // /** @type string */
-  // const [userName, setUserName] = useState();
+  const [userName, setUserName] = useState("");
+  const [entrevista, setEntrevista] = useState({});
+  const [isClick, setIsClick] = useState(false);
 
-  // const userState = useSelector(selectUser);
+  const userState = useSelector(selectUser);
+  const entrevistaState = useSelector(selectEntrevista);
 
-  // useEffect(() => {
-  //   setUserName(userState.nombres);
-  // }, [userState]);
+  useEffect(() => {
+    setUserName(userState.nombres);
+    if (entrevistaState.id) {
+      setEntrevista(entrevistaState);
+    }
+  }, [userState, entrevistaState]);
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await dispatch(startLogout());
+    navigate("/");
+  };
+
+  const handleUserClick = () => {
+    setIsClick(!isClick);
+  };
 
   return (
     <nav className="bg-gray-900">
@@ -64,40 +86,35 @@ const HeaderLaptop = () => {
             </button>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              ></img>
-            </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 <NavLink
-                  href="#"
+                  to={"/"}
                   className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
                   aria-current="page"
                 >
-                  Dashboard
+                  Home
+                </NavLink>
+                <NavLink
+                  to={"/agenda"}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                >
+                  Agenda
                 </NavLink>
                 <NavLink
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
-                  Team
+                  Entrevistas
                 </NavLink>
-                <NavLink
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                >
-                  Projects
-                </NavLink>
-                <NavLink
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                >
-                  Calendar
-                </NavLink>
+                {entrevista.id && (
+                  <NavLink
+                    to={"/form"}
+                    className="text-gray-700 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium bg-red-200"
+                  >
+                    Form
+                  </NavLink>
+                )}
               </div>
             </div>
           </div>
@@ -132,6 +149,7 @@ const HeaderLaptop = () => {
                   id="user-menu-button"
                   aria-expanded="false"
                   aria-haspopup="true"
+                  onClick={handleUserClick}
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only">Open user menu</span>
@@ -142,42 +160,36 @@ const HeaderLaptop = () => {
                   ></img>
                 </button>
               </div>
-
-              <div
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="user-menu-button"
-                tabIndex="-1"
-              >
-                <NavLink
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
+              {isClick && (
+                <div
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="user-menu-button"
                   tabIndex="-1"
-                  id="user-menu-item-0"
                 >
-                  Your Profile
-                </NavLink>
-                <NavLink
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabIndex="-1"
-                  id="user-menu-item-1"
-                >
-                  Settings
-                </NavLink>
-                <NavLink
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabIndex="-1"
-                  id="user-menu-item-2"
-                >
-                  Sign out
-                </NavLink>
-              </div>
+                  <NavLink
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700"
+                    role="menuitem"
+                    tabIndex="-1"
+                    id="user-menu-item-0"
+                  >
+                    {userName}
+                  </NavLink>
+                  <button
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700"
+                    role="menuitem"
+                    tabIndex="-1"
+                    id="user-menu-item-2"
+                    onClick={handleLogout}
+                    type="button"
+                  >
+                    Salir
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

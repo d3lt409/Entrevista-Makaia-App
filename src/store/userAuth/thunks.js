@@ -17,9 +17,6 @@ export const checkingAuthentication = () => {
 export const startLoginWithEmailPassword = ({ correo, password }) => {
   return async (dispatch) => {
     try {
-      // const user = selectUser(getState()); // Usar getState para obtener el estado actual
-      // console.log(user);
-
       const result = await loginMentor({ correo, password });
 
       if (result.status >= 400) {
@@ -29,16 +26,16 @@ export const startLoginWithEmailPassword = ({ correo, password }) => {
           timer: 3000,
           icon: "error",
         });
-        return dispatch(logout(result.data.message));
+        dispatch(logout(result.data.message));
+        return result;
       } else {
         dispatch(setId(result.data.user.id));
         dispatch(setToken(result.data.token));
         localStorage.setItem("token", result.data.token);
         localStorage.setItem("id", result.data.user.id);
-        console.log({ token: result.data.token, ...result.data.user });
-        return dispatch(
-          login({ token: result.data.token, ...result.data.user })
-        );
+        // console.log({ token: result.data.token, ...result.data.user });
+        dispatch(login({ token: result.data.token, ...result.data.user }));
+        return result;
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -50,6 +47,8 @@ export const startLoginWithEmailPassword = ({ correo, password }) => {
 export const startLogout = () => {
   return async (dispatch) => {
     localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    localStorage.removeItem("entrevista_id");
     dispatch(logout({ errorMessage: null }));
   };
 };
