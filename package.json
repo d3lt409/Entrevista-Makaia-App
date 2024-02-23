@@ -2,7 +2,7 @@
   "name": "entrevista-makaia-app",
   "private": true,
   "version": "0.0.0",
-  "proxy": "https://entrevista-makaia-api.onrender.com",
+  "proxy": "https://equipo4-production-caa0.up.railway.app",
   "type": "module",
   "scripts": {
     "dev": "vite",
