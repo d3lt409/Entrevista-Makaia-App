@@ -5,6 +5,7 @@ export const getMentorById = async (id) => {
     .get("mentor/" + id, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
+        "Access-Control-Allow-Origin": "*",
       },
     })
     .then((response) => response)
